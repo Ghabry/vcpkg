@@ -11,6 +11,12 @@ vcpkg_download_distfile(ARCHIVE
     SHA512 1d3b39678e7cc4e9794e724982886a4918642231048eb76b9f683aad5a19e0b7c52b3b9c7107cb1a3879464682c4a3a97b58ab012d082bd9e5a80c67adf8ce8b)
 vcpkg_extract_source_archive(${ARCHIVE} ${CURRENT_BUILDTREES_DIR}/src/icu-59.1)
 
+vcpkg_download_distfile(ARCHIVE
+    URLS "https://ci.easyrpg.org/job/icudata/lastSuccessfulBuild/artifact/icudata.tar.gz"
+    FILENAME "icudata.tar.gz"
+    SHA512 7e4c128278e9c82a4405f5eef345d9ac63ca5813ad2eb870d468f666bd01132e087d2d946cd207220cced24e75e898b692e11dcca4a5a0e27a3eab55190335c8)
+vcpkg_extract_source_archive(${ARCHIVE} ${CURRENT_BUILDTREES_DIR}/src/icu-59.1/icu/source/data/in)
+
 vcpkg_apply_patches(SOURCE_PATH ${SOURCE_PATH}
     PATCHES ${CMAKE_CURRENT_LIST_DIR}/disable-escapestr-tool.patch)
 
@@ -31,7 +37,7 @@ vcpkg_execute_required_process(
 set(AUTOMAKE_DIR ${MSYS_ROOT}/usr/share/automake-1.15)
 file(COPY ${AUTOMAKE_DIR}/config.guess ${AUTOMAKE_DIR}/config.sub DESTINATION ${SOURCE_PATH}/source)
 
-set(CONFIGURE_OPTIONS "--host=i686-pc-mingw32 --disable-samples --disable-tests")
+set(CONFIGURE_OPTIONS "--host=i686-pc-mingw32 --disable-samples --disable-tests --enable-extras=no --enable-icuio=no --with-data-packaging=static")
 
 if(VCPKG_LIBRARY_LINKAGE STREQUAL dynamic)
     set(CONFIGURE_OPTIONS "${CONFIGURE_OPTIONS} --disable-static --enable-shared")
@@ -121,7 +127,7 @@ if(VCPKG_LIBRARY_LINKAGE STREQUAL dynamic)
 else()
     # rename static libraries to match import libs
     # see https://gitlab.kitware.com/cmake/cmake/issues/16617
-    foreach(MODULE dt in io tu uc)
+    foreach(MODULE dt in tu uc)
         file(RENAME ${CURRENT_PACKAGES_DIR}/lib/sicu${MODULE}.lib ${CURRENT_PACKAGES_DIR}/lib/icu${MODULE}.lib)
         file(RENAME ${CURRENT_PACKAGES_DIR}/debug/lib/sicu${MODULE}d.lib ${CURRENT_PACKAGES_DIR}/debug/lib/icu${MODULE}d.lib)
     endforeach()

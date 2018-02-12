@@ -13,8 +13,8 @@ vcpkg_configure_cmake(
     PREFER_NINJA
     OPTIONS
         -DSDL_MIXER_ENABLE_MP3=ON       # mpg123
-        -DSDL_MIXER_ENABLE_FLAC=ON      # libflac
-        -DSDL_MIXER_ENABLE_MOD=ON       # libmodplug
+        -DSDL_MIXER_ENABLE_FLAC=OFF      # libflac
+        -DSDL_MIXER_ENABLE_MOD=OFF       # libmodplug
         -DSDL_MIXER_ENABLE_OGGVORBIS=ON # libvorbis 
     OPTIONS_DEBUG
         -DSDL_MIXER_SKIP_HEADERS=ON)
